@@ -41,7 +41,7 @@ public class JDBCConnectionPool {
     //private static final String RUTA_XML = "C:\\Program Files\\Apache Software Foundation\\Tomcat 7.0\\webapps\\parametros_sigep\\WEB-INF\\confBD.xml";
     
     /*ING-SOFTWARE*/
-    private static final String RUTA_XML = "C:\\WebApps\\parametros_sigep\\parametros_sigep\\web\\WEB-INF\\confBD.xml";    
+    private static final String RUTA_XML = "C:\\WebApps\\parametros_sigep\\web\\WEB-INF\\confBD.xml";    
     
     /*ING-SOFTWARE APACHE TOMCAT 7*/    
     //private static final String RUTA_XML = "C:\\apache-tomcat-7.0.29\\webapps\\parametros_sigep\\WEB-INF\\confBD.xml";

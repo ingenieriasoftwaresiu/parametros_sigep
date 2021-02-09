@@ -31,7 +31,7 @@
             <driver>com.mysql.jdbc.Driver</driver>
             <url>jdbc:mysql://172.30.100.37:3306/sigap</url>
             <userBD>admin</userBD>
-            <passwdBD>admin</passwdBD>
+            <passwdBD>2Lb2s4d2l14c1</passwdBD>
         </sigap>
 </parametros>
 -->

@@ -25,9 +25,9 @@ public class ActividadDAOImpl extends  JDBCConnectionPool implements ActividadDA
     
     private static final String OBTENER_UNA = "SELECT * FROM sigap.sigap_actividades WHERE Codigo = ?";
     private static final String OBTENER_TODAS = "SELECT * FROM sigap.sigap_actividades";
-    private static final String OBTENER_POR_FECHA_IGUAL = "SELECT * FROM sigap.sigap_actividades WHERE Fin = ?";
-    private static final String OBTENER_POR_FECHA_MENOR = "SELECT * FROM sigap.sigap_actividades WHERE Fin <= ?";
-    private static final String OBTENER_POR_FECHA_MAYOR = "SELECT * FROM sigap.sigap_actividades WHERE Fin >= ?";
+    private static final String OBTENER_POR_FECHA_IGUAL = "SELECT a.Codigo as Codigo, a.Etapa as Etapa, a.Proyecto as Proyecto, a.Descripcion as Descripcion, a.Inicio as Inicio, a.Fin as Fin, a.Observacion as Observacion, a.Producto as Producto FROM sigap.sigap_actividades a, sigap_proyectos p WHERE (a.Proyecto = p.Codigo) and a.Fin = ? and p.TipoProyectos <> '11';";
+    private static final String OBTENER_POR_FECHA_MENOR = "SELECT a.Codigo as Codigo, a.Etapa as Etapa, a.Proyecto as Proyecto, a.Descripcion as Descripcion, a.Inicio as Inicio, a.Fin as Fin, a.Observacion as Observacion, a.Producto as Producto FROM sigap.sigap_actividades a, sigap_proyectos p WHERE (a.Proyecto = p.Codigo) and a.Fin <= ? and p.TipoProyectos <> '11';";
+    private static final String OBTENER_POR_FECHA_MAYOR = "SELECT a.Codigo as Codigo, a.Etapa as Etapa, a.Proyecto as Proyecto, a.Descripcion as Descripcion, a.Inicio as Inicio, a.Fin as Fin, a.Observacion as Observacion, a.Producto as Producto FROM sigap.sigap_actividades a, sigap_proyectos p WHERE (a.Proyecto = p.Codigo) and a.Fin >= ? and p.TipoProyectos <> '11';";
     private static final String COLUMNA_CODIGO = "Codigo";
     private static final String COLUMNA_ETAPA = "Etapa";
     private static final String COLUMNA_PROYECTO = "Proyecto";

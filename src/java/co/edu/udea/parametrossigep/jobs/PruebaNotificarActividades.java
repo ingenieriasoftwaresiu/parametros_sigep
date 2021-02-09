@@ -79,8 +79,8 @@ public class PruebaNotificarActividades {
                 actividades = null;            
             }
             
-            if (actividades != null && actividades.size() > 0){
-                
+            if (actividades != null && actividades.size() > 0){                
+                                
                 try{
                     dtFechaActual = sdf.parse(strFechaActual);
                 }catch(ParseException pe){
