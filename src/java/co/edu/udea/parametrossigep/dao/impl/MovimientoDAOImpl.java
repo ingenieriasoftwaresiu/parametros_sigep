@@ -25,7 +25,7 @@ import java.util.List;
 public class MovimientoDAOImpl extends JDBCConnectionPool implements MovimientoDAO{
     
     private static final String OBTENER_UNO = "SELECT * from sigap.sigap_movimientos WHERE Codigo = ?";
-    private static final String OBTENER_MOVIMIENTOS_RENTASPROPIAS = "SELECT * from sigap.sigap_movimientos WHERE ((Tipo = ? and Rubro = ? and (Subrubro = ? or Subrubro = ?)) or (Tipo = ? and Rubro = ? and (Subrubro = ? or Subrubro = ?))) and (Fecha BETWEEN ? and ?);";
+    private static final String OBTENER_MOVIMIENTOS_RENTASPROPIAS = "SELECT * from sigap.sigap_movimientos WHERE  (Tipo = ? and Rubro = ? and (Subrubro = ? or Subrubro = ?)) and (Fecha BETWEEN ? and ?);";
     private static final String OBTENER_RESERVAS_TIPOSOPORTE = "SELECT * from sigap.sigap_movimientos WHERE Tipo = ? and Fecha = ? and (TipoSoporte = ? or TipoSoporte = ?) ORDER BY Codigo";
     private static final String COLUMNA_CODIGO = "Codigo";
     private static final String COLUMNA_PROYECTO = "Proyecto";
@@ -175,15 +175,15 @@ public class MovimientoDAOImpl extends JDBCConnectionPool implements MovimientoD
     @Override
     public List<Movimiento> obtenerMovimientosRentasPropiasFechaActual(Integer intNumDiasNotificar) throws GIDaoException {
         
-        String strTipoMov1, strTipoMov2, strRubro1, strRubro2, strSubrubro1, strSubrubro2, strFechaBase;
+        String strTipoMov1, strTipoMov2, strRubro1, strRubro2, strSubrubro1, strSubrubro2, strFechaBase, strCodigoCxC;
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<Movimiento> movimientos = new ArrayList<Movimiento>();
-        Movimiento movimiento = null;
-        strTipoMov1 = "CuentasXCobrar";
+        Movimiento movimiento = null, movimientoCxC=null;
+        //strTipoMov1 = "CuentasXCobrar";
         strTipoMov2 = "Ingreso";
-        strRubro1 = "10";
+        //strRubro1 = "10";
         strRubro2 = "1";
         strSubrubro1 = "208";
         strSubrubro2 = "6094";
@@ -198,37 +198,49 @@ public class MovimientoDAOImpl extends JDBCConnectionPool implements MovimientoD
                         
          try{
             con = getConexion();
-            ps = con.prepareCall(OBTENER_MOVIMIENTOS_RENTASPROPIAS);
-            ps.setString(1, strTipoMov1);
-            ps.setString(2, strRubro1);
+            ps = con.prepareCall(OBTENER_MOVIMIENTOS_RENTASPROPIAS);           
+            ps.setString(1, strTipoMov2);
+            ps.setString(2, strRubro2);
             ps.setString(3, strSubrubro1);
             ps.setString(4, strSubrubro2);
-            ps.setString(5, strTipoMov2);
-            ps.setString(6, strRubro2);
-            ps.setString(7, strSubrubro1);
-            ps.setString(8, strSubrubro2);
-            ps.setString(9, strFechaBase);
-            ps.setString(10, FECHA_ACTUAL);
+            ps.setString(5, strFechaBase);
+            ps.setString(6, FECHA_ACTUAL);
               
             rs = ps.executeQuery();
             
             if (rs != null){
-                while (rs.next()){                    
-                    movimiento = new Movimiento();
-                    movimiento.setCodigoMov(rs.getString(COLUMNA_CODIGO));
-                    movimiento.setCodProyecto(rs.getString(COLUMNA_PROYECTO));
-                    movimiento.setRubro(rs.getInt(COLUMNA_RUBRO));
-                    movimiento.setSubrubro(rs.getInt(COLUMNA_SUBRUBRO));
-                    movimiento.setEntidadFinanciadora(rs.getString(COLUMNA_ENTIDADFINANCIADORA));
-                    movimiento.setCentroCostos(rs.getString(COLUMNA_CENTROCOSTO));
-                    movimiento.setTipoMov(rs.getString(COLUMNA_TIPO));
-                    movimiento.setCodReserva(rs.getString(COLUMNA_RESERVA));
-                    movimiento.setFecha(rs.getDate(COLUMNA_FECHA));
-                    movimiento.setValor(rs.getLong(COLUMNA_VALOR));
-                    movimiento.setNumeroSoporte(rs.getString(COLUMNA_NUMEROSOPORTE));
-                    movimiento.setTipoSoporte(rs.getString(COLUMNA_TIPOSOPORTE));
-                    movimiento.setObservacion(rs.getString(COLUMNA_OBSERVACION));                   
-                    movimientos.add(movimiento);
+                while (rs.next()){   
+                    
+                    strCodigoCxC = rs.getString(COLUMNA_RESERVA);                   
+                                        
+                    try{
+                        movimientoCxC = this.obtenerUno(strCodigoCxC);
+                    }catch(GIDaoException gi){
+                        new GIDaoException("Se generó un error al intentar recuperar la CxC con código " + strCodigoCxC, gi);
+                        movimientoCxC = null;
+                    }
+                    
+                    if (movimientoCxC != null){
+                    
+                        movimiento = new Movimiento();
+                        movimiento.setCodigoMov(rs.getString(COLUMNA_CODIGO));
+                        movimiento.setCodProyecto(rs.getString(COLUMNA_PROYECTO));
+                        movimiento.setRubro(rs.getInt(COLUMNA_RUBRO));
+                        movimiento.setSubrubro(rs.getInt(COLUMNA_SUBRUBRO));
+                        movimiento.setEntidadFinanciadora(rs.getString(COLUMNA_ENTIDADFINANCIADORA));
+                        movimiento.setCentroCostos(rs.getString(COLUMNA_CENTROCOSTO));
+                        movimiento.setTipoMov(rs.getString(COLUMNA_TIPO));
+                        movimiento.setCodReserva(rs.getString(COLUMNA_RESERVA));
+                        movimiento.setFecha(rs.getDate(COLUMNA_FECHA));
+                        movimiento.setValor(rs.getLong(COLUMNA_VALOR));
+                        movimiento.setNumeroSoporte(rs.getString(COLUMNA_NUMEROSOPORTE));
+                        movimiento.setTipoSoporte(rs.getString(COLUMNA_TIPOSOPORTE));
+                        movimiento.setObservacion(movimientoCxC.getObservacion() + " / "+ rs.getString(COLUMNA_OBSERVACION));                   
+                        movimientos.add(movimiento);
+                    }
+                    
+                    movimientoCxC = null;
+                    strCodigoCxC = "";
                 }
             }
             
