@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--CONFIGURACIÓN DEL AMBIENTE DE DESARROLLO-->
+
+<parametros>
+        <sigap>
+            <driver>com.mysql.jdbc.Driver</driver>
+            <url>jdbc:mysql://localhost:3306/sigap</url>
+            <userBD>admin</userBD>
+            <passwdBD>2Lb2s4d2l14c1</passwdBD>
+        </sigap>
+</parametros>
+
+<!--CONFIGURACIÓN DEL AMBIENTE DE PRUEBAS-->
+
+<!--
+<parametros>
+        <sigap>
+            <driver>com.mysql.jdbc.Driver</driver>
+            <url>jdbc:mysql://172.30.200.11:3306/sigap</url>
+            <userBD>admin</userBD>
+            <passwdBD>2Lb2s4d2l14c1</passwdBD>
+        </sigap>
+</parametros>
+-->
+
+<!--CONFIGURACIÓN DEL AMBIENTE DE PRODUCCIÓN-->
+<!--
+<parametros>
+        <sigap>
+            <driver>com.mysql.jdbc.Driver</driver>
+            <url>jdbc:mysql://172.30.100.37:3306/sigap</url>
+            <userBD>admin</userBD>
+            <passwdBD>2Lb2s4d2l14c1</passwdBD>
+        </sigap>
+</parametros>
+-->
+
+<!--CONFIGURACIÓN DEL AMBIENTE DE CIB-->
+<!--
+<parametros>
+        <sigap>
+            <driver>com.mysql.jdbc.Driver</driver>
+            <url>jdbc:mysql://192.168.0.6:3306/sigap</url>
+            <userBD>root</userBD>
+            <passwdBD>admincib_2017*</passwdBD>
+        </sigap>
+</parametros>
+-->
